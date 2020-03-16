@@ -52,5 +52,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{format('{{{0}{1}{2}}}', 'update-chromium', github.run_id, github.run_number)}}
-          commit-message: ${{format('{{{0}{1}}}','update chromium revision',REVISION)}}
+          commit-message: ${{format('{{{0}{1}}}','update chromium revision',env.REVISION)}}
           title: "update chromium revision"
