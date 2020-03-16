@@ -19,7 +19,8 @@ jobs:
           export REVISION=$(curl -s -S $LASTCHANGE_URL)
           echo "latest revision is $REVISION"
           npx json -I -f package.json -e "this.taiko.chromium_revision = $REVISION"
-          export VERSION="$(./bin/taiko getVersion.js --no-log)"
+          npm install -g .
+          export VERSION="$(taiko getVersion.js --no-log)"
           npx json -I -f package.json -e "this.taiko.chromium_version = $VERSION"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
