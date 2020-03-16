@@ -18,7 +18,10 @@ jobs:
           LASTCHANGE_URL="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media"
           export REVISION=$(curl -s -S $LASTCHANGE_URL)
           echo "latest revision is $REVISION"
-          npx json -I -f package.json -e "this.taiko.chromium_revision = $REVISION"
+          npx json -I -f package.json -e 'this.taiko.chromium_revision = "$REVISION"'
+          npm install
+          export VERSION="$(taiko getVersion.js --no-log)"
+          npx json -I -f package.json -e 'this.taiko.chromium_version = "$VERSION"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
         with:

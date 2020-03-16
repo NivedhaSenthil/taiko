@@ -1,5 +1,3 @@
-#! /usr/bin/env node
-const {openBrowser,client,closeBrowser} = require('./lib/taiko');
 (async () => {
     try {
         await openBrowser();
