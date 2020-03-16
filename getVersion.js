@@ -1,6 +1,6 @@
 (async () => {
     try {
-        await openBrowser({args:[
+        await openBrowser({headless:true, args:[
             '--disable-gpu',
             '--disable-dev-shm-usage',
             '--disable-setuid-sandbox',
