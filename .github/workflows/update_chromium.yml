@@ -51,6 +51,6 @@ jobs:
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{format('{{0}{1}{2}}', 'update-chromium', github.run_id, github.run_number)}}
-          commit-message: ${{format('{{0}{1}}','update chromium to revision ',env.REVISION)}}
-          title: ${{format('{{0}{1}}','update chromium to revision',env.REVISION)}}
+          branch: ${{format('{0}{1}{2}', 'update-chromium', github.run_id, github.run_number)}}
+          commit-message: ${{format('{0}{1}','update chromium to revision ',env.REVISION)}}
+          title: ${{format('{0}{1}','update chromium to revision',env.REVISION)}}
