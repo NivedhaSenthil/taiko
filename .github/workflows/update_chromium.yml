@@ -15,10 +15,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Get Chromium version and update
         run: |
-          Linux ="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media"
+          LASTCHANGE_URL ="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media"
           Mac = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Mac%2FLAST_CHANGE?generation=1584339534008794&alt=media"
           Windows = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win%2FLAST_CHANGE?generation=1584338615619518&alt=media"
-          export REVISION=$(curl -s -S $Linux)
+          export REVISION=$(curl -s -S $LASTCHANGE_URL)
           echo "latest revision is $REVISION"
           npx json -I -f package.json -e "this.taiko.chromium_revision = $REVISION"
       - name: Create Pull Request
