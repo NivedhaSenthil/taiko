@@ -1,8 +1,10 @@
 name: update-chromium
 on:
-  schedule:
+  # schedule:
     # cron job that will run 1st and 15th of every month by 12pm
-    - cron:  '40 8 * * *'
+    # - cron:  '40 8 * * *'
+  push:
+    branches: [ master ]
 
 jobs:
   update-to-latest-chromium:
@@ -48,5 +50,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{format('{{{0}{1}{2}}}', 'update-chromium', github.run_id, github.run_number)}}
-          commit-message: "update chromium revision"
+          commit-message: ${{format('{{{0}{1}}}',"update chromium revision",REVISION)}}
           title: "update chromium revision"
