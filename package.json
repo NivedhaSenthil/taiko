@@ -36,8 +36,8 @@
     ]
   },
   "taiko": {
-    "chromium_revision": "724157",
-    "chromium_version": "81.0.3994.0"
+    "chromium_revision": "750477",
+    "chromium_version": "83.0.4087.0"
   },
   "author": "getgauge",
   "license": "MIT",
