@@ -19,7 +19,6 @@ jobs:
           export REVISION=$(curl -s -S $LASTCHANGE_URL)
           echo "latest revision is $REVISION"
           npx json -I -f package.json -e "this.taiko.chromium_revision = '$REVISION'"
-          apt-get install libglu1-mesa:i386
           npm install
           export VERSION="$(bin/taiko.js getVersion.js --no-log)"
           npx json -I -f package.json -e "this.taiko.chromium_version = '$VERSION'"
