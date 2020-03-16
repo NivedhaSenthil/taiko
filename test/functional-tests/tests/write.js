@@ -1,31 +1,22 @@
-const {
-  write,
-  focus,
-  clear,
-  near,
-  inputField,
-  into
-} = require('../../../lib/taiko');
-var _selectors = require('./selectors');
+const { write, clear, near, textBox, into, toLeftOf, $ } = require('taiko');
+var { getElements } = require('./selectors');
 
 step('Write <text>', async function(text) {
   await write(text);
 });
 
-step('Focus <table>', async function(table) {
-  await focus(_selectors.getElement(table));
+step('Clear element <cssSelector>', async function(cssSelector) {
+  await clear($(cssSelector));
 });
 
-step('Clear element that is in focus', async function() {
-  await clear();
+step('Write <text> into Input Field near <table>', async function(text, table) {
+  for (const element of getElements(table)) {
+    await write(text, into(textBox(near(element))));
+  }
 });
 
-step('Write <text> into Input Field near <element>', async function(
-  text,
-  element
-) {
-  await write(
-    text,
-    into(inputField(near(_selectors.getElement(element))))
-  );
+step('Write <text> into textArea to left of <table>', async function(text, table) {
+  for (const element of getElements(table)) {
+    await write(text, into(textBox(toLeftOf(element))));
+  }
 });

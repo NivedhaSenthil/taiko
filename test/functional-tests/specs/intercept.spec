@@ -1,23 +1,21 @@
 #Intercept Api
 
 ## With simple response body
-* Respond to "https://docs.gauge.org/latest/writing-specifications.html" with "mocked specifications page"
-* Navigate to "https://docs.gauge.org"
-* Click an element that contains "Write Specifications"
-* Assert text "mocked specifications page" exists on the page.
+* Respond to "http://localhost:3001/dropdown" with "mocked dropdown page"
+* Navigate to "http://localhost:3001/"
+* Click "Dropdown"
+* Assert text "mocked dropdown page" exists on the page.
 
 ## With array as a response body
-* Respond to "https://docs.gauge.org/latest/writing-specifications.html" with json "[\"mocked\",\"specifications\",\"page\"]"
-
-* Navigate to "https://docs.gauge.org"
-* Click an element that contains "Write Specifications"
-* Assert text "[\"mocked\",\"specifications\",\"page\"]" exists on the page.
+* Respond to "http://localhost:3001/dropdown" with json "[\"mocked\",\"dropdown\",\"page\"]"
+* Navigate to "http://localhost:3001/"
+* Click "Dropdown"
+* Assert text "[\"mocked\",\"dropdown\",\"page\"]" exists on the page.
 
 ## With object as a response body
-* Respond to "https://docs.gauge.org/latest/writing-specifications.html" with json "{\"name\":\"Jon\",\"age\":\"20\"}"
-
-* Navigate to "https://docs.gauge.org"
-* Click an element that contains "Write Specifications"
+* Respond to "http://localhost:3001/dropdown" with json "{\"name\":\"Jon\",\"age\":\"20\"}"
+* Navigate to "http://localhost:3001/"
+* Click "Dropdown"
 * Assert text "{\"name\":\"Jon\",\"age\":\"20\"}" exists on the page.
 
 ## With regex in URL
@@ -39,3 +37,18 @@
 
 * Navigate to "https://localhost/employees/2/address"
 * Assert text "{\"city\":\"City1\",\"State\":\"State1\"}" exists on the page.
+
+## Reset a response for a URL
+* Respond to "http://localhost:3001/dropdown" with "actual dropdown page"
+* Reset intercept for "http://localhost:3001/dropdown"
+* Respond to "http://localhost:3001/dropdown" with "mocked dropdown page" 
+* Navigate to "http://localhost:3001/"
+* Click "Dropdown"
+* Assert text "mocked dropdown page" exists on the page.
+
+## Reset all intercepts
+* Respond to "http://localhost:3001/dropdown" with "mocked dropdown page"
+* Reset all intercept
+* Navigate to "http://localhost:3001/"
+* Click "Dropdown"
+* Assert text "mocked dropdown page" does not exist

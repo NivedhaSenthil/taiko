@@ -2,8 +2,8 @@
 
 ## Write, Press, Click
 
-* Navigate to "http://the-internet.herokuapp.com/iframe"
-* Clear element that is in focus
+* Navigate to "http://localhost:3001/iframe"
+* Clear element "#tinymce"
 * Write "Clear it"
 * Press "Enter"
 * Click "File"
@@ -12,8 +12,8 @@
 
 ## Write, Clear
 
-* Navigate to "http://the-internet.herokuapp.com/iframe"
-* Clear element that is in focus
+* Navigate to "http://localhost:3001/iframe"
+* Clear element "#tinymce"
 * Write "Clear it"
 * Assert text "Clear it" exists on the page.
 
@@ -39,25 +39,18 @@
 
 ## Hover
 * Navigate to relative path "./specs/data/IFrameCompare.html"
-* Hover on element 
+* Hover on element
 
    |Type|Selector        |
    |----|----------------|
-   |$   |".image_overlay"|
-* Click "Compare"
-* Hover on element 
-
-   |Type|Selector        |
-   |----|----------------|
-   |$   |".image_overlay"|
-* Click "Remove"
+   |$   |".figure"|
+* Assert text "View profile" exists on the page.
 
 ## Drag and drop
 * Navigate to relative path "./specs/data/IFrameDragAndDrop.html"
-* Drag ".document" and drop to ".trash"
-* Drag ".document" and drop at 
+* Drag "#column-a" and drop to "#column-b"
+* Drag "#column-b" and drop at
 
    |direction|pixel|
    |---------|-----|
    |right    |300  |
-   |down     |100  |

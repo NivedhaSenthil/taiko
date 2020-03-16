@@ -1,135 +1,194 @@
-let { openBrowser, radioButton, closeBrowser, evaluate, $, intervalSecs, timeoutSecs, goto, text } = require('../../lib/taiko');
-let { createHtml, removeFile, openBrowserArgs } = require('./test-util');
+const chai = require('chai');
+const expect = chai.expect;
+const chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+let {
+  openBrowser,
+  radioButton,
+  closeBrowser,
+  goto,
+  button,
+  click,
+  setConfig,
+} = require('../../lib/taiko');
+let { createHtml, removeFile, openBrowserArgs, resetConfig } = require('./test-util');
 
-describe('radio button', () => {
-    beforeAll(async () => {
-        await openBrowser(openBrowserArgs);
-    }, 30000);
+const test_name = 'radio button';
 
-    afterAll(async () => {
-        await closeBrowser();
-    }, 30000);
+describe(test_name, () => {
+  let filePath;
+  before(async () => {
+    let innerHtml =
+      '<form>' +
+      '<input type="radio" id="radioButtonWithInlineLabel" name="testRadioButton" value="radioButtonWithInlineLabel">radioButtonWithInlineLabel</input>' +
+      '<label>' +
+      '<input name="testRadioButton" type="radio" value="radioButtonWithWrappedLabel"/>' +
+      '<span>radioButtonWithWrappedLabel</span>' +
+      '</label>' +
+      '<p>' +
+      '<input id="radioButtonWithLabelFor" name="testRadioButton" type="radio" value="radioButtonWithLabelFor"/>' +
+      '<label for="radioButtonWithLabelFor">radioButtonWithLabelFor</label>' +
+      '</p>' +
+      '<input name="hiddenRadioButton" type="radio" id="hiddenRadioButton" value="hiddenRadioButton">hiddenRadioButton</input>' +
+      '<input type="reset" value="Reset">' +
+      '</form>' +
+      '<input type="radio" id="someRadioButton" name="testRadioButton" value="someRadioButton">someRadioButton</input>' +
+      '<button id="panel" style="display:none">show on check</button>' +
+      '<script>' +
+      'document.getElementById("hiddenRadioButton").style.display = "none";' +
+      'var elem = document.getElementById("radioButtonWithInlineLabel");' +
+      'elem.addEventListener("click", myFunction);' +
+      'function myFunction() {' +
+      'document.getElementById("panel").style.display = "block";' +
+      '}</script>';
+    filePath = createHtml(innerHtml, 'radioButton');
+    await openBrowser(openBrowserArgs);
+    await goto(filePath);
+    setConfig({
+      waitForNavigation: false,
+      retryTimeout: 100,
+      retryInterval: 10,
+    });
+  });
 
-    describe('with inline text', () => {
-        let filePath;
-        beforeAll(async () => {
-            let innerHtml = '<form>' +
-                '<input type="radio" id="red" name="color" value="red" checked>Red</input>' +
-                '<input type="radio" name="color" value="yellow">Yellow</input>' +
-                '<input type="radio" name="color" value="green">Green</input>' +
-                '</form>'+
-                '<div id="panel" style="display:none">show on check</div>' +
-                '<script>' +
-                'var elem = document.getElementById("red");'+
-                'elem.addEventListener("click", myFunction);'+
-                'function myFunction() {' +
-                'document.getElementById("panel").style.display = "block";' +
-                '}</script>';
-            filePath = createHtml(innerHtml, 'radioButton');
-        });
+  after(async () => {
+    resetConfig();
+    await closeBrowser();
+    removeFile(filePath);
+  });
 
-        afterAll(async () => {
-            removeFile(filePath);
-        });
-
-        beforeEach(async () =>{
-            await goto(filePath);
-        });
-
-        test('test exists()', async () => {
-            await expect(radioButton('Yellow').exists()).resolves.toBeTruthy();
-            await expect(radioButton('Brown').exists(intervalSecs(0), timeoutSecs(0))).resolves.toBeFalsy();
-        });
-
-        test('test select()', async () => {
-            await radioButton('Green').select();
-            let value = await evaluate($('input[name=color]:checked'), (element) => element.value);
-            expect(value.result).toBe('green');
-        });
-
-        test('test select() triggers events', async() =>{
-            await radioButton('Red').select();
-            await expect(text('show on check').exists()).resolves.toBeTruthy();
-        });
-
-        test('test deselect()', async () => {
-            await radioButton('Red').deselect();
-            let value = await evaluate($('input[value=red]'), (element) => element.checked);
-            await expect(value.result).toBeFalsy();
-        });
-
-        test('test isSelected()', async () => {
-            await radioButton('Red').select();
-            await expect(radioButton('Red').isSelected()).resolves.toBeTruthy();
-        });
+  describe('with inline text', () => {
+    afterEach(async () => {
+      await click('Reset');
     });
 
-    describe('wrapped in label', () => {
-        let filePath;
-        beforeAll(async () => {
-            let innerHtml = '<form>' +
-                '<label>' +
-                '<input name="color" type="radio" value="red" checked />' +
-                '<span>Red</span>' +
-                '</label>' +
-                '<label>' +
-                '<input name="color" type="radio" value="yellow" />' +
-                '<span>Yellow</span>' +
-                '</label>' +
-                '<label>' +
-                '<input name="color" type="radio" value="green" />' +
-                '<span>Green</span>' +
-                '</label>' +
-                '</form>';
-            filePath = createHtml(innerHtml, 'radioButton');
-        });
-
-        afterAll(async () => {
-            removeFile(filePath);
-        });
-
-        beforeEach(async () =>{
-            await goto(filePath);
-        });
-
-        test('test exists()', async () => {
-            await expect(radioButton('Green').exists()).resolves.toBeTruthy();
-            await expect(radioButton('Brown').exists(intervalSecs(0), timeoutSecs(0))).resolves.toBeFalsy();
-        });
+    it('test exists()', async () => {
+      expect(await radioButton('radioButtonWithInlineLabel').exists()).to.be.true;
+      expect(await radioButton('Something').exists()).to.be.false;
     });
 
-    describe('using label for', () => {
-        let filePath;
-        beforeAll(async () => {
-            let innerHtml = '<form>' +
-                '<p>' +
-                '<input id="c1" name="color" type="radio" value="red" checked />' +
-                '<label for="c1">Red</label>' +
-                '</p>' +
-                '<p>' +
-                '<label for="c2">Yellow</label>' +
-                '<input id="c2" name="color" type="radio" value="yellow" />' +
-                '</p>' +
-                '<p>' +
-                '<label for="c3"><input id="c3" name="color" type="radio" value="green" />Green</label>' +
-                '</p>' +
-                '</form>';
-            filePath = createHtml(innerHtml, 'radioButton');
-        });
-
-        afterAll(async () => {
-            removeFile(filePath);
-        });
-
-        beforeEach(async () =>{
-            await goto(filePath);
-        });
-
-        test('test exists()', async () => {
-            await expect(radioButton('Red').exists()).resolves.toBeTruthy();
-            await expect(radioButton('Yellow').exists()).resolves.toBeTruthy();
-            await expect(radioButton('Green').exists()).resolves.toBeTruthy();
-            await expect(radioButton('Brown').exists(intervalSecs(0), timeoutSecs(0))).resolves.toBeFalsy();
-        });
+    it('test select()', async () => {
+      await radioButton('radioButtonWithInlineLabel').select();
+      let isSelected = await radioButton('radioButtonWithInlineLabel').isSelected();
+      expect(isSelected).to.be.true;
     });
+
+    it('test select() should throw if the element is not found', async () => {
+      await expect(radioButton('foo').select()).to.be.eventually.rejected;
+    });
+
+    it('test select() triggers events', async () => {
+      await radioButton('radioButtonWithInlineLabel').select();
+      expect(await button('show on check').exists()).to.be.true;
+    });
+
+    it('test deselect()', async () => {
+      await radioButton('radioButtonWithInlineLabel').select();
+      await radioButton('radioButtonWithInlineLabel').deselect();
+      let isSelected = await radioButton('radioButtonWithInlineLabel').isSelected();
+      expect(isSelected).to.be.false;
+    });
+
+    it('test deselect() should throw error if the element is not found', async () => {
+      await expect(radioButton('foo').deselect()).to.be.eventually.rejected;
+    });
+
+    it('test isSelected()', async () => {
+      await radioButton('radioButtonWithInlineLabel').select();
+      expect(await radioButton('radioButtonWithInlineLabel').isSelected()).to.be.true;
+    });
+
+    it('test isSelected() to throw error if the element is not found', async () => {
+      await expect(radioButton('foo').isSelected()).to.be.eventually.rejectedWith('');
+    });
+
+    it('test text should throw if the element is not found', async () => {
+      await expect(radioButton('.foo').text()).to.be.eventually.rejectedWith('');
+    });
+  });
+
+  describe('wrapped in label', () => {
+    it('test exists()', async () => {
+      expect(await radioButton('radioButtonWithWrappedLabel').exists()).to.be.true;
+    });
+
+    it('test description', async () => {
+      const description = radioButton('radioButtonWithWrappedLabel').description;
+      expect(description).to.be.eql('Radio button with label radioButtonWithWrappedLabel ');
+    });
+  });
+
+  describe('with hidden style', () => {
+    it('should find hidden radio buttons', async () => {
+      expect(
+        await radioButton('hiddenRadioButton', {
+          selectHiddenElement: true,
+        }).exists(),
+      ).to.be.true;
+    });
+
+    it('should return true for non hidden element when isVisible fn is called on button', async () => {
+      expect(await radioButton('radioButtonWithWrappedLabel').isVisible()).to.be.true;
+    });
+
+    it('should return false for hidden element when isVisible fn is called on textBox', async () => {
+      expect(
+        await radioButton({ id: 'hiddenRadioButton' }, { selectHiddenElement: true }).isVisible(),
+      ).to.be.false;
+    });
+  });
+
+  describe('using label for', () => {
+    it('test exists()', async () => {
+      expect(await radioButton('radioButtonWithLabelFor').exists()).to.be.true;
+    });
+
+    it('test description', async () => {
+      const description = radioButton('radioButtonWithLabelFor').description;
+      expect(description).to.be.eql('Radio button with label radioButtonWithLabelFor ');
+    });
+  });
+
+  describe('test elementList properties', () => {
+    it('test get of elements', async () => {
+      const elements = await radioButton({
+        id: 'someRadioButton',
+      }).elements();
+      expect(elements[0].get())
+        .to.be.a('number')
+        .above(0);
+    });
+
+    it('test description of elements', async () => {
+      let elements = await radioButton({
+        id: 'someRadioButton',
+      }).elements();
+      expect(elements[0].description).to.be.eql(
+        'Radio button[@id = concat(\'someRadioButton\', "")]',
+      );
+    });
+
+    it('test isSelected of elements', async () => {
+      let elements = await radioButton({
+        id: 'someRadioButton',
+      }).elements();
+      expect(await elements[0].isSelected()).to.be.false;
+    });
+
+    it('test select of elements', async () => {
+      let elements = await radioButton({
+        id: 'someRadioButton',
+      }).elements();
+      await elements[0].select();
+      expect(await elements[0].isSelected()).to.be.true;
+    });
+
+    it('test deselect of elements', async () => {
+      let elements = await radioButton({
+        id: 'someRadioButton',
+      }).elements();
+      await elements[0].deselect();
+      expect(await elements[0].isSelected()).to.be.false;
+    });
+  });
 });

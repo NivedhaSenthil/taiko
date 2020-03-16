@@ -1,16 +1,14 @@
 # Selectors
 ## Contains
 
-* Intercept Google Analytics
-* Navigate to "https://gauge.org/index.html"
-* Click link "Documentation"
-* Focus 
+* Navigate to "http://localhost:3001/"
+* Click "Dynamic Loading"
+* Click an element that contains "Example 2:"
+* Assert Exists
 
-   |Type      |Selector       |
-   |----------|---------------|
-   |inputField|{"id":"search"}|
-* Write "Custom"
-* Click an element that contains "Taking"
+   |Type|Selector                      |
+   |----|------------------------------|
+   |text|Start                         |
 
 ## Id
 tags: knownIssue
@@ -19,7 +17,7 @@ tags: knownIssue
 * Click "About"
 * Select "हिन्दी" of Combo Box near 
 
-   |Type      |Selector             |
-   |----------|---------------------|
-   |inputField|{"id":"searchinput"}|
+   |Type   |Selector             |
+   |-------|---------------------|
+   |textBox|{"id":"searchinput"}|
 * Click "Doodles संग्रह"

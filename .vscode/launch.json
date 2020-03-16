@@ -7,40 +7,37 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Jest All",
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "name": "Mocha All",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "--expand"
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/test/unit-tests"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-            }
+            "internalConsoleOptions": "neverOpen"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Jest Current File",
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "name": "Mocha Current File",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "${fileBasenameNoExtension}",
-                "--runInBand",
-                "--expand"
+                "--timeout",
+                "999999",
+                "--colors",
+                "${file}"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-            }
+            "internalConsoleOptions": "neverOpen"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/bin/taiko.js",
+            "console": "integratedTerminal",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

@@ -1,14 +1,20 @@
 <h1 align="center">Taiko</h1>
-<p align="center">A node.js library to automate chrome/chromium browser</p>
+<p align="center">A Node.js library for testing modern web applications</p>
 
-[![Build Status](https://getgauge.visualstudio.com/Taiko/_apis/build/status/Taiko-CI?branchName=master)](https://getgauge.visualstudio.com/Taiko/_build/latest?definitionId=1&branchName=master)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![alpha software]( https://img.shields.io/badge/status-alpha-lightgrey.svg)](https://github.com/getgauge/taiko/issues) [![npm version](https://badge.fury.io/js/taiko.svg?style=flat-square)](https://badge.fury.io/js/taiko) [![dependencies Status](https://david-dm.org/getgauge/taiko/status.svg)](https://david-dm.org/getgauge/taiko) [![devDependencies Status](https://david-dm.org/getgauge/taiko/dev-status.svg)](https://david-dm.org/getgauge/taiko?type=dev) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/getgauge/taiko/issues)
+[![Actions Status](https://github.com/getgauge/taiko/workflows/taiko/badge.svg)](https://github.com/getgauge/taiko/actions)
+[![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/getgauge/taiko/blob/master/LICENSE)
+[![npm version](https://badge.fury.io/js/taiko.svg?style=flat-square)](https://badge.fury.io/js/taiko)
+[![dependencies Status](https://david-dm.org/getgauge/taiko/status.svg)](https://david-dm.org/getgauge/taiko)
+[![devDependencies Status](https://david-dm.org/getgauge/taiko/dev-status.svg)](https://david-dm.org/getgauge/taiko?type=dev)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/getgauge/taiko/issues)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
-![Taiko REPL](https://user-images.githubusercontent.com/54427/43075023-f4d18878-8e9c-11e8-91b2-227a3d02e0f6.gif)
+
+![Taiko REPL](https://user-images.githubusercontent.com/44019225/60337143-da31a280-99bf-11e9-80a4-57917d81e0b6.gif)
 
 # What’s Taiko?
 
-Taiko is a free and open source browser automation tool built by the team behind [Gauge](https://gauge.org/) from [ThoughtWorks](https://www.thoughtworks.com/). Taiko is a node library with a clear and concise API to automate the chrome browser. Tests written in Taiko are highly readable and maintainable. 
+Taiko is a free and open source browser automation tool built by the team behind [Gauge](https://gauge.org/) from [ThoughtWorks](https://www.thoughtworks.com/). Taiko is a Node.js library with a clear and concise API to automate **Chromium based browsers**(Chrome, Microsoft Edge, Opera). Tests written in Taiko are highly readable and maintainable. 
 
 With Taiko it’s easy to
 
@@ -31,7 +37,7 @@ Taiko is built ground up to test modern web applications. Here’s a list of a f
 
 ## Easy Installation
 
-Taiko works on Windows, MacOS and Linux. You only need to have [Node.js](https://nodejs.org/en/) installed in your system to start writing Taiko scripts in JavaScript. After you’ve installed Node.js open a terminal application (or powershell in the case of Windows) and install Taiko using [npm](https://www.npmjs.com/) with the command
+Taiko works on Windows, MacOS and Linux. You only need [Node.js](https://nodejs.org/en/) installed in your system to start writing Taiko scripts in JavaScript. After you’ve installed Node.js open a terminal application (or powershell in the case of Windows) and install Taiko using [npm](https://www.npmjs.com/) with the command
 
     $ npm install -g taiko
 
@@ -42,7 +48,7 @@ This installs Taiko and the latest version of Chromium browser. We are all set t
 Taiko comes with a Recorder that’s a REPL for writing test scripts. You can use Taiko’s JavaScript API to control the browser from the REPL. To launch the REPL type taiko in your favorite terminal application
 
     $ taiko
-    Version: 0.2.0 (Chromium:69.0.3476.0)
+    Version: 0.8.0 (Chromium:76.0.3803.0)
     Type .api for help and .exit to quit
     > 
 
@@ -50,9 +56,9 @@ This launches the Taiko prompt. You can now use Taiko’s API as commands in thi
 
     > openBrowser()
 
-You can now automate this Chrome browser instance with commands, for example, make the browser search google for something.
+You can now automate this Chromium browser instance with commands, for example, make the browser search google for something.
 
-    > goto("google.com")
+    > goto("google.com/?hl=en")
     > write("taiko test automation")
     > click("Google Search")
 
@@ -69,8 +75,8 @@ Taiko’s REPL keeps a history of all successful commands. Once you finish a flo
             await goto("google.com");
             await write("taiko test automation");
             await click("Google Search");
-        } catch (e) {
-                console.error(e);
+        } catch (error) {
+                console.error(error);
         } finally {
                 closeBrowser();
         }
@@ -101,7 +107,7 @@ By default Taiko runs the script in headless mode, that means it does not launch
 Taiko’s REPL also documents all the API’s. To view all available API’s use the special command `.api`
 
     $ taiko
-    Version: 0.2.0 (Chromium:69.0.3476.0)
+    Version: 0.8.0 (Chromium:76.0.3803.0)
     Type .api for help and .exit to quit
     > .api
     Browser actions
@@ -132,13 +138,13 @@ clicks on any element with the text `Google Search` (a button on the page at htt
 
 Or if you want to write into a specific text field 
 
-    > write("something", into(textField({placeholder: "Username"})))
+    > write("something", into(textBox({placeholder: "Username"})))
 
 With Taiko’s API we can avoid using ids/css/xpath selectors to create reliable tests that don’t break with changes in the web page’s structure.
 
 You can also use Taiko’s proximity selectors to visually locate elements. For example
 
-    > click(checkbox(near("Username")))
+    > click(checkBox(near("Username")))
 
 Will click the checkbox that is nearest to any element with the text `Username`. 
 
@@ -184,7 +190,7 @@ Learn more about [Gauge](https://docs.gauge.org)!
 
 ## Documentation
 
-* [API](http://taiko.gauge.org)
+* [API](https://docs.taiko.dev)
 
 ## Inspired by
 
@@ -193,8 +199,9 @@ Learn more about [Gauge](https://docs.gauge.org)!
 
 ## Talk to us
 
-For queries and contributions talk to the [Gauge](https://github.com/getgauge/gauge/#talk-to-us) team.
+* [Spectrum](https://spectrum.chat/taiko) for questions and help
+* [Github Issues](https://github.com/getgauge/taiko/issues) to report issues
 
 ## Copyright
 
-Copyright 2018 [ThoughtWorks, Inc](https://www.thoughtworks.com/)
+Copyright 2019 [ThoughtWorks, Inc](https://www.thoughtworks.com/)
